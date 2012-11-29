@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Picture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -157,19 +156,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 			}
 		});
 
-		// ask user where the url is the first time.
 		setUrl();
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
-			
-			@Override
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-					String key) {
-				if(SettingsActivity.CONFIG_URL_KEY.equals(key)) {
-					setUrl();
-				}
-			}
-		});
 	}
 
 	private void setUrl() {
