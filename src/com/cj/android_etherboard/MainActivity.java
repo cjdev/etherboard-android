@@ -1,5 +1,6 @@
 package com.cj.android_etherboard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.cj.android_etherboard.R;
@@ -32,7 +33,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	private static final float X_MAX_ANGLE = 45.0f;
 	private static final float Y_MAX_ANGLE = 45.0f;
-	private static final int PIXEL_FUDGE = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +45,41 @@ public class MainActivity extends Activity implements SensorEventListener {
 		loadWebView();
 	}
 
-	private static Sensor getFirstOfType(int type, SensorManager mSensorManager) {
+	class SensorInfo {
+		
+		private String name;
+		private float resolution;
+		private float power;
+		public SensorInfo(Sensor sens) {
+			name = sens.getName();
+			resolution = sens.getResolution();
+			power = sens.getPower();
+		}
+		@Override
+		public String toString() {
+			return ""+name + ": (res: "+resolution+") (pow: "+power+")";
+		}
+		
+	}
+	private Sensor getBestResolution(int type, SensorManager mSensorManager) {
 		List<Sensor> sensors = mSensorManager.getSensorList(type);
 		if (sensors.isEmpty()) {
 			System.out.println("There is no sensor of type " + type + " :(");
 			return null;
 		} else {
 			Sensor s = sensors.get(0);
+			float resolution = s.getResolution();
+			for(Sensor g : sensors) {
+				if(g.getResolution() < resolution) {
+					s = g;
+					resolution = g.getResolution();
+				}
+			}
+			List<SensorInfo> info = new ArrayList<SensorInfo>();
+			for(Sensor sens : sensors) {
+				info.add(new SensorInfo(sens));
+			}
+			System.out.println("sensors found: " + info);
 			System.out.println("Yeah, there is a sensor! (" + sensors.size()
 					+ " to be exact).  We're gonna go with " + s.getName());
 			return s;
@@ -108,7 +136,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	private void loadSensor() {
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		accelerometer = getFirstOfType(Sensor.TYPE_ORIENTATION, mSensorManager);
+		accelerometer = getBestResolution(Sensor.TYPE_ORIENTATION, mSensorManager);
 	}
 	
 	@SuppressWarnings("deprecation")
