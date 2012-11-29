@@ -2,8 +2,13 @@
 
     <item
         android:id="@+id/menu_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="3"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
+    <item
+        android:id="@+id/menu_recalibrate"
+        android:orderInCategory="2"
+        android:showAsAction="never"
+        android:title="@string/menu_recalibrate"/>
 
 </menu>

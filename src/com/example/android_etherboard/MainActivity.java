@@ -24,6 +24,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -39,7 +40,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 		loadSensor();
 
 		loadUIReferences();
-		loadCalibrateButton();
 		loadWebView();
 	}
 
@@ -82,6 +82,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private int viewHeight;
 
 	private int viewWidth;
+	private Object recordedUrlPreference;
 
 	private String format(float val) {
 		return String.format("%06.2f", val);
@@ -106,16 +107,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private void loadSensor() {
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		accelerometer = getFirstOfType(Sensor.TYPE_ORIENTATION, mSensorManager);
-	}
-
-	private void loadCalibrateButton() {
-		((Button) findViewById(R.id.recalibrate)).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				recalibrate();
-			}
-		});
 	}
 
 	@SuppressWarnings("deprecation")
@@ -160,9 +151,17 @@ public class MainActivity extends Activity implements SensorEventListener {
 	}
 
 	private void setUrl() {
+		webView.clearView();
+		String url = getUrlPreference();
+		Toast.makeText(getApplicationContext(), "Loading " + url, Toast.LENGTH_LONG).show();
+		recordedUrlPreference = url;
+		webView.loadUrl(url);
+	}
+
+	private String getUrlPreference() {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String url = preferences.getString(SettingsActivity.CONFIG_URL_KEY, SettingsActivity.CONFIG_DEFAULT_URL);
-		webView.loadUrl(url);
+		return url;
 	}
 
 	private void getSize(WebView view) {
@@ -198,6 +197,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 		loadUIReferences();
 		mSensorManager.registerListener(this, accelerometer,
 				SensorManager.SENSOR_DELAY_NORMAL);
+		
+		if(urlHasBeenChanged()) {
+			setUrl();
+		}
+	}
+
+	private boolean urlHasBeenChanged() {
+		String currentUrlPreference = getUrlPreference();
+		boolean changed = !currentUrlPreference.equals(recordedUrlPreference);
+		return changed;
 	}
 
 	@Override
@@ -284,12 +293,19 @@ public class MainActivity extends Activity implements SensorEventListener {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		//The following comments are used for when one of multiple menu items needs to be accounted for
-		//AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-	    // getItemId() -->  This gets the id of the menu item touched
-	    //  then you would most likely use R.id.<name> to verify what was pushed
-	    startActivity(new Intent(this, SettingsActivity.class));
-	    return true;
+		switch (item.getItemId()) {
+			case R.id.menu_recalibrate:
+				recalibrate();
+				Toast.makeText(getApplicationContext(), "Top Left is now here.", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.menu_settings:
+				startActivity(new Intent(this.getApplicationContext(), SettingsActivity.class));
+				break;
+			default:
+				Toast.makeText(getApplicationContext(), "what?", Toast.LENGTH_SHORT).show();
+		}
+
+		return true;
 	}
 	
 }

@@ -1,22 +1,15 @@
 package com.example.android_etherboard;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.Preference.BaseSavedState;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
@@ -33,39 +26,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         
         Preference connectionPref = findPreference(CONFIG_URL_KEY);
         connectionPref.setSummary(preferences.getString(CONFIG_URL_KEY, CONFIG_DEFAULT_URL));
- /*       EditTextPreference myEditText = (EditTextPreference) findPreference("pref_url");
-        setTextListenerOnEditTextPreference(myEditText); */
     }
     
-/*    private void setTextListenerOnEditTextPreference(final EditTextPreference myEditText) {
-    	
-    	myEditText.getEditText().addTextChangedListener(new TextWatcher(){
 
-			@Override
-			public void afterTextChanged(Editable arg0) {
-				if (arg0.length() == 0)
-					myEditText.getEditText().setError("No empty URL allowed");
-				else {
-					String regex = "https?://";
-		    	    Pattern pattern = Pattern.compile(regex);
-		    	    Matcher matcher = pattern.matcher(arg0.toString());
-		    	    if (!matcher.find())
-		    	    	myEditText.getEditText().setError("Does not match necessary format - http:// or https://");
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void onTextChanged(CharSequence chars, int start, int lengthBefore, int count) {
-				// TODO Auto-generated method
-			}
-    	});
-	}*/
-
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(CONFIG_URL_KEY)) {
             Preference connectionPref = findPreference(key);

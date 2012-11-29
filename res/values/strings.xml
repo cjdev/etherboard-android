@@ -4,5 +4,6 @@
     <string name="app_name">android-etherboard</string>
     <string name="hello_world">Welcome to CJ Etherboard app!</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_recalibrate">Recalibrate</string>
 
 </resources>
