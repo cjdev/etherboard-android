@@ -2,7 +2,7 @@ package com.example.android_etherboard;
 
 import java.util.List;
 
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,22 +13,18 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.Camera.PreviewCallback;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnClickListener;
 import android.view.View;
-import android.webkit.ConsoleMessage;
+import android.view.View.OnClickListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -123,20 +119,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 		});
 	}
 
+	@SuppressWarnings("deprecation")
+	@SuppressLint("SetJavaScriptEnabled")
 	private void loadWebView() {
 		WebSettings settings = webView.getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setBuiltInZoomControls(true);
 		settings.setPluginsEnabled(true);
 
-		webView.setWebChromeClient(new WebChromeClient() {
-
-			@Override
-			public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-				System.out.println(consoleMessage.message());
-				return super.onConsoleMessage(consoleMessage);
-			}
-		});
+		webView.addJavascriptInterface(new WebSocketFactory(webView), "WebSocketFactory");
+		webView.setWebChromeClient(new WebChromeClient());
 
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
