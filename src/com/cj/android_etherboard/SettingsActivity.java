@@ -1,7 +1,9 @@
-package com.example.android_etherboard;
+package com.cj.android_etherboard;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.cj.android_etherboard.R;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;

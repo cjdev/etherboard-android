@@ -1,6 +1,8 @@
-package com.example.android_etherboard;
+package com.cj.android_etherboard;
 
 import java.util.List;
+
+import com.cj.android_etherboard.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -107,6 +109,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 	private void loadSensor() {
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		accelerometer = getFirstOfType(Sensor.TYPE_ORIENTATION, mSensorManager);
+	}
+	
+	private void loadCalibrateButton() {
+		((Button) findViewById(R.id.recalibrate)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				recalibrate();
+			}
+		});
 	}
 
 	@SuppressWarnings("deprecation")

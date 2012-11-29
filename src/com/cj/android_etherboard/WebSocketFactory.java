@@ -24,7 +24,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  *  
  */
-package com.example.android_etherboard;
+package com.cj.android_etherboard;
 
 import java.net.URI;
 import java.util.Random;
