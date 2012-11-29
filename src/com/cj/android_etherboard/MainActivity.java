@@ -111,16 +111,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 		accelerometer = getFirstOfType(Sensor.TYPE_ORIENTATION, mSensorManager);
 	}
 	
-	private void loadCalibrateButton() {
-		((Button) findViewById(R.id.recalibrate)).setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				recalibrate();
-			}
-		});
-	}
-
 	@SuppressWarnings("deprecation")
 	@SuppressLint("SetJavaScriptEnabled")
 	private void loadWebView() {
