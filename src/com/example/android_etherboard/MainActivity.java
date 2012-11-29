@@ -170,8 +170,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 			Picture picture = view.capturePicture();
 			if (picture != null) {
-				viewHeight = (int)(picture.getHeight() * scale) + PIXEL_FUDGE;
-				viewWidth = (int)(picture.getWidth() * scale) + PIXEL_FUDGE;
+				viewHeight = (int)(picture.getHeight() * scale) - view.getHeight();
+				viewWidth = (int)(picture.getWidth() * scale) - view.getWidth();
 				infoText.setText("[" + viewWidth + " x " + viewHeight + "] (" + scale + ")");
 			}
 		}
