@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+            android:key="pref_key"
+            android:summary="Check box if you want to change the url"
+            android:title="Configure Url"
+            android:defaultValue="true" />
+    <EditTextPreference
+        android:dependency="pref_key"
+        android:key="pref_url"
+        android:title="Current url"
+        android:summary="http://www.google.com"
+        android:defaultValue="http://www.google.com"
+        android:persistent="true" />
+</PreferenceScreen>

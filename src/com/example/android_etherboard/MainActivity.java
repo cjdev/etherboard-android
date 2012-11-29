@@ -2,17 +2,25 @@ package com.example.android_etherboard;
 
 import java.util.List;
 
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Picture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.Camera.PreviewCallback;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
 import android.view.View.OnClickListener;
+import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -20,6 +28,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
@@ -156,7 +165,25 @@ public class MainActivity extends Activity implements SensorEventListener {
 			}
 		});
 
-		webView.loadUrl("http://cjtools101.wl.cj.com:40180");
+		// ask user where the url is the first time.
+		setUrl();
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+					String key) {
+				if(SettingsActivity.CONFIG_URL_KEY.equals(key)) {
+					setUrl();
+				}
+			}
+		});
+	}
+
+	private void setUrl() {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String url = preferences.getString(SettingsActivity.CONFIG_URL_KEY, SettingsActivity.CONFIG_DEFAULT_URL);
+		webView.loadUrl(url);
 	}
 
 	private void getSize(WebView view) {
@@ -275,4 +302,15 @@ public class MainActivity extends Activity implements SensorEventListener {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		//The following comments are used for when one of multiple menu items needs to be accounted for
+		//AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    // getItemId() -->  This gets the id of the menu item touched
+	    //  then you would most likely use R.id.<name> to verify what was pushed
+	    startActivity(new Intent(this, SettingsActivity.class));
+	    return true;
+	}
+	
 }
