@@ -3,6 +3,7 @@ package com.cj.android_etherboard;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cj.CJEventKit;
 import com.cj.android_etherboard.R;
 
 import android.annotation.SuppressLint;
@@ -44,6 +45,18 @@ public class MainActivity extends Activity implements SensorEventListener {
 		loadUIReferences();
 		loadWebView();
 	}
+	
+/*    @Override
+    public void onStart() {
+        super.onStart();
+        CJEventKit.appStarted(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CJEventKit.activityDestroyed(this);
+    }*/
 
 	class SensorInfo {
 		
@@ -145,7 +158,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 		WebSettings settings = webView.getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setBuiltInZoomControls(true);
-		settings.setPluginsEnabled(true);
+		// Deprecated
+		//settings.setPluginsEnabled(true);
+		// Replacement: Even this is obsolete.
+		settings.setPluginState(WebSettings.PluginState.ON);
 
 		webView.addJavascriptInterface(new WebSocketFactory(webView), "WebSocketFactory");
 		webView.setWebChromeClient(new WebChromeClient());
