@@ -46,17 +46,19 @@ public class MainActivity extends Activity implements SensorEventListener {
 		loadWebView();
 	}
 	
-/*    @Override
+    @Override
     public void onStart() {
         super.onStart();
+        System.out.println("onStart():  calling CJEventKit.appStarted()");
         CJEventKit.appStarted(this);
+        System.out.println("onStart():  returned");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         CJEventKit.activityDestroyed(this);
-    }*/
+    }
 
 	class SensorInfo {
 		
@@ -158,9 +160,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 		WebSettings settings = webView.getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setBuiltInZoomControls(true);
-		// Deprecated
-		//settings.setPluginsEnabled(true);
-		// Replacement: Even this is obsolete.
+		/*
+		 * TODO:
+		 * "Plugins" are going away, so redesign is needed.
+		 */
 		settings.setPluginState(WebSettings.PluginState.ON);
 
 		webView.addJavascriptInterface(new WebSocketFactory(webView), "WebSocketFactory");
