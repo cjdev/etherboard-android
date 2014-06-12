@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cj.CJEventKit;
-import com.cj.android_etherboard.R;
+import com.cj.etherboard.android.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
