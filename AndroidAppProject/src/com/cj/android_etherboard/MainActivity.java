@@ -1,7 +1,9 @@
 package com.cj.android_etherboard;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.cj.BasicSaleInfo;
@@ -14,6 +16,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Picture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -37,6 +42,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	private static final float X_MAX_ANGLE = 45.0f;
 	private static final float Y_MAX_ANGLE = 45.0f;
+	
+	Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         System.out.println("onStart():  calling CJEventKit.appStarted()");
         CJEventKit.appStarted(this);
         System.out.println("onStart():  returned");
+        context = this;
     }
 
     @Override
@@ -343,6 +351,18 @@ public class MainActivity extends Activity implements SensorEventListener {
         Toast.makeText(getApplicationContext(), "Bought Stuff.", Toast.LENGTH_LONG).show();
         // end-example
 	}
+	
+	private void checkTimestamps() {
+        String dirDateString = dateString(getAppDirInstallationTime(),"App Dir Date");
+        String pkgInstallDateString = dateString(getPackageInstallationTime(),"Pkg Install Date");
+        String pkgUpdateDateString = dateString(getPackageUpdateTime(),"Pkg Update Date");
+        String dateFrame = dirDateString + "\n" + pkgInstallDateString + "\n" + pkgUpdateDateString;
+        Toast.makeText(getApplicationContext(),dateFrame, Toast.LENGTH_LONG).show();
+	}
+    String dateString(Long l, String title){
+        return "" + (new Date(l)).toString() + " " + title;
+    }
+
 
 	private String vectorToString(float[] vector) {
 		return "(" + format(vector[0]) + "," + format(vector[1]) + ","
@@ -366,8 +386,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 				startActivity(new Intent(this.getApplicationContext(), SettingsActivity.class));
 				break;
 			case R.id.menu_buy_stuff:
-				//startActivity(new Intent(this.getApplicationContext(), SettingsActivity.class));
 				buyStuff();
+				break;
+			case R.id.menu_check_timestamps:
+				checkTimestamps();
 				break;
 			default:
 				Toast.makeText(getApplicationContext(), "what?", Toast.LENGTH_SHORT).show();
@@ -376,4 +398,41 @@ public class MainActivity extends Activity implements SensorEventListener {
 		return true;
 	}
 	
+	/************************************************************
+	 * 
+	 * Timestamp checks
+	 * 
+	 * **********************************************************/
+	 
+    public Long getPackageInstallationTime() {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            return pi.firstInstallTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            return -1L;
+        }
+    }
+    
+    public Long getPackageUpdateTime() {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            return pi.lastUpdateTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            return -1L;
+        }
+    }
+    
+    public Long getAppDirInstallationTime() {
+        try {
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo appInfo = pm.getApplicationInfo(context.getPackageName(), 0);
+            String appFile = appInfo.sourceDir;
+            return new File(appFile).lastModified();
+        } catch (PackageManager.NameNotFoundException e) {
+            return -1L;
+        }
+    }
+
 }

@@ -1,6 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     
+    
+   <item
+        android:id="@+id/menu_check_timestamps"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        android:title="@string/menu_check_timestamps"/>
    <item
         android:id="@+id/menu_buy_stuff"
         android:orderInCategory="4"

@@ -6,6 +6,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_recalibrate">Recalibrate</string>
     <string name="menu_buy_stuff">Buy Stuff</string>
+    <string name="menu_check_timestamps">Check Timestamps</string>
     
 
 </resources>
