@@ -1,9 +1,12 @@
 package com.cj.android_etherboard;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cj.BasicSaleInfo;
 import com.cj.CJEventKit;
+import com.cj.InAppEvent;
 import com.cj.etherboard.android.R;
 
 import android.annotation.SuppressLint;
@@ -328,6 +331,18 @@ public class MainActivity extends Activity implements SensorEventListener {
 			webView.scrollTo(0, 0);
 		}
 	}
+	
+	private void buyStuff() {
+		Toast.makeText(getApplicationContext(), "Buy Stuff ", Toast.LENGTH_LONG).show();
+        // begin-example: Reporting a basic non-itemized sale
+        InAppEvent event = new InAppEvent.Builder("purchase", "ABX16578")
+                .withSaleInfo(new BasicSaleInfo(new BigDecimal("7.99")))
+                .build();
+
+        CJEventKit.reportInAppEvent(MainActivity.this, event);
+        Toast.makeText(getApplicationContext(), "Bought Stuff.", Toast.LENGTH_LONG).show();
+        // end-example
+	}
 
 	private String vectorToString(float[] vector) {
 		return "(" + format(vector[0]) + "," + format(vector[1]) + ","
@@ -349,6 +364,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 				break;
 			case R.id.menu_settings:
 				startActivity(new Intent(this.getApplicationContext(), SettingsActivity.class));
+				break;
+			case R.id.menu_buy_stuff:
+				//startActivity(new Intent(this.getApplicationContext(), SettingsActivity.class));
+				buyStuff();
 				break;
 			default:
 				Toast.makeText(getApplicationContext(), "what?", Toast.LENGTH_SHORT).show();
